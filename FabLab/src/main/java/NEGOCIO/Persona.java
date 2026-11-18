@@ -9,6 +9,7 @@ package NEGOCIO;
  * @author Asus
  */
 public class Persona {
+
     private String identificacion;
     private String nombre;
     private String correo;
@@ -16,6 +17,23 @@ public class Persona {
     private String vinculacion;
     private String rol; //Comunidad, externo, Instructor
     private String entidadProcedencia;
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof Persona)) {
+            return false;
+        }
+        Persona otra = (Persona) obj;
+        return this.identificacion.equals(otra.identificacion);
+    }
+
+    @Override
+    public int hashCode() {
+        return this.identificacion.hashCode();
+    }
 
     public String getIdentificacion() {
         return identificacion;
@@ -72,8 +90,8 @@ public class Persona {
     public void setEntidadProcedencia(String entidadProcedencia) {
         this.entidadProcedencia = entidadProcedencia;
     }
-    
-    public Persona(String identificacion, String nombre, String correo, String telefono, String vinculacion, String rol, String entidadProcedencia){
+
+    public Persona(String identificacion, String nombre, String correo, String telefono, String vinculacion, String rol, String entidadProcedencia) {
         this.identificacion = identificacion;
         this.nombre = nombre;
         this.correo = correo;
@@ -82,5 +100,5 @@ public class Persona {
         this.rol = rol;
         this.entidadProcedencia = entidadProcedencia;
     }
-    
+
 }

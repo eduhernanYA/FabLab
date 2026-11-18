@@ -5,6 +5,11 @@
 package PRESENTACION;
 
 import com.sun.source.tree.BreakTree;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
 
 /**
  *
@@ -12,11 +17,20 @@ import com.sun.source.tree.BreakTree;
  */
 public class FormCrearCurso extends javax.swing.JFrame {
 
-    private FormPrincipal myFormPrincipal;
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FormCrearCurso.class.getName());
+    //Constante de como va el tiempo
+    private static final DateTimeFormatter fmtFecha = DateTimeFormatter.ofPattern("dd/MM/uuuu").withResolverStyle(ResolverStyle.STRICT);
+    private static final DateTimeFormatter fmtHora = DateTimeFormatter.ofPattern("HH:mm").withResolverStyle(ResolverStyle.STRICT);
+    private final FormPrincipal myFormPrincipal;
+
+    private LocalDate fechaInicio;
+    private LocalDate fechaFinal;
+    private LocalTime horaInicio;
+    private LocalTime horaFinal;
 
     /**
      * Creates new form FormCurso
+     *
+     * @param myP
      */
     public FormCrearCurso(FormPrincipal myP) {
         initComponents();
@@ -36,6 +50,7 @@ public class FormCrearCurso extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        cmdVerificarLaboratorio1 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -55,11 +70,17 @@ public class FormCrearCurso extends javax.swing.JFrame {
         txtFechaFinal = new javax.swing.JTextField();
         cmbLaboratorio = new javax.swing.JComboBox<>();
         cmbInstructor = new javax.swing.JComboBox<>();
-        cmdCupoMax = new javax.swing.JTextField();
+        txtCupoMax = new javax.swing.JTextField();
         cmbPoblacionObj = new javax.swing.JComboBox<>();
         cmdTerminar = new javax.swing.JButton();
         cmdVerificarLaboratorio = new javax.swing.JButton();
-        cmbVerificarInstructor = new javax.swing.JButton();
+        cmdVerificarInstructor = new javax.swing.JButton();
+        cmdVerificarPoblacion = new javax.swing.JButton();
+        jLabel10 = new javax.swing.JLabel();
+        txtEntidadSolicitante = new javax.swing.JTextField();
+
+        cmdVerificarLaboratorio1.setText("verificar laboratorio");
+        cmdVerificarLaboratorio1.addActionListener(this::cmdVerificarLaboratorio1ActionPerformed);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -68,7 +89,7 @@ public class FormCrearCurso extends javax.swing.JFrame {
 
         jLabel2.setText("Codigo");
 
-        jLabel3.setText("Nombre");
+        jLabel3.setText("Nombre del curso");
 
         jLabel5.setText("Horario (hora) (inicio/fin)");
 
@@ -98,88 +119,109 @@ public class FormCrearCurso extends javax.swing.JFrame {
 
         txtFechaFinal.addActionListener(this::txtFechaFinalActionPerformed);
 
-        cmbLaboratorio.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<<NO SELECCIONADO>>" }));
+        cmbLaboratorio.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<NO SELECCIONADO>" }));
         cmbLaboratorio.addActionListener(this::cmbLaboratorioActionPerformed);
 
-        cmbInstructor.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<<NO SELECCIONADO>>" }));
+        cmbInstructor.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<NO SELECCIONADO>" }));
 
-        cmdCupoMax.addActionListener(this::cmdCupoMaxActionPerformed);
+        txtCupoMax.addActionListener(this::txtCupoMaxActionPerformed);
 
-        cmbPoblacionObj.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<<NO SELECCIONADO>>" }));
+        cmbPoblacionObj.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<NO SELECCIONADO>" }));
 
         cmdTerminar.setText("TERMINAR");
+        cmdTerminar.addActionListener(this::cmdTerminarActionPerformed);
 
-        cmdVerificarLaboratorio.setText("verificar laboratorio");
+        cmdVerificarLaboratorio.setText("Verificar");
         cmdVerificarLaboratorio.addActionListener(this::cmdVerificarLaboratorioActionPerformed);
 
-        cmbVerificarInstructor.setText("verificar Instructor");
-        cmbVerificarInstructor.addActionListener(this::cmbVerificarInstructorActionPerformed);
+        cmdVerificarInstructor.setText("Verificar");
+        cmdVerificarInstructor.addActionListener(this::cmdVerificarInstructorActionPerformed);
+
+        cmdVerificarPoblacion.setText("Verificar");
+        cmdVerificarPoblacion.addActionListener(this::cmdVerificarPoblacionActionPerformed);
+
+        jLabel10.setText("Entidad Solicitante: ");
+
+        txtEntidadSolicitante.addActionListener(this::txtEntidadSolicitanteActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(28, 28, 28)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(28, 28, 28)
+                        .addComponent(jLabel2)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addGap(18, 18, 18)
-                                .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(221, 221, 221)
-                                .addComponent(jLabel3)
-                                .addGap(18, 18, 18)
-                                .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel7)
-                                    .addComponent(jLabel6))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(txtFechaInicio, javax.swing.GroupLayout.DEFAULT_SIZE, 297, Short.MAX_VALUE)
-                                    .addComponent(txtFechaFinal)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel5)
-                                .addGap(18, 18, 18)
-                                .addComponent(txtHoraInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel13)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtHoraFinal, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel6))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtFechaInicio, javax.swing.GroupLayout.DEFAULT_SIZE, 297, Short.MAX_VALUE)
+                            .addComponent(txtFechaFinal)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(295, 295, 295)
-                        .addComponent(cmdTerminar))
+                        .addComponent(jLabel5)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtHoraInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel13)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtHoraFinal, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(270, 270, 270)
-                        .addComponent(jLabel1))
-                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(cmdTerminar)
+                        .addGap(286, 286, 286))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGap(14, 14, 14)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel8)
+                                .addComponent(jLabel10)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cmbLaboratorio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cmdVerificarLaboratorio))
+                                .addComponent(txtEntidadSolicitante, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel9)
-                                .addGap(18, 18, 18)
-                                .addComponent(cmbInstructor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cmbVerificarInstructor)))
-                        .addGap(45, 45, 45)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel11)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cmdCupoMax, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cmbPoblacionObj, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(90, Short.MAX_VALUE))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel8)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(cmbLaboratorio, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(cmdVerificarLaboratorio))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel9)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(cmbInstructor, 0, 194, Short.MAX_VALUE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(cmdVerificarInstructor)))
+                                .addGap(28, 28, 28)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel11)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(txtCupoMax, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(cmbPoblacionObj, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(cmdVerificarPoblacion)))))))
+                .addGap(33, 33, 33))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel1))
+                .addGap(197, 197, 197))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -189,9 +231,9 @@ public class FormCrearCurso extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jLabel3)
                     .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(9, 9, 9)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
@@ -212,17 +254,22 @@ public class FormCrearCurso extends javax.swing.JFrame {
                     .addComponent(cmbLaboratorio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cmdVerificarLaboratorio)
                     .addComponent(jLabel12)
-                    .addComponent(cmbPoblacionObj, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cmbPoblacionObj, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cmdVerificarPoblacion))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
                     .addComponent(jLabel11)
                     .addComponent(cmbInstructor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cmdCupoMax, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cmbVerificarInstructor))
-                .addGap(78, 78, 78)
+                    .addComponent(txtCupoMax, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cmdVerificarInstructor))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10)
+                    .addComponent(txtEntidadSolicitante, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
                 .addComponent(cmdTerminar)
-                .addContainerGap(44, Short.MAX_VALUE))
+                .addGap(44, 44, 44))
         );
 
         pack();
@@ -252,72 +299,194 @@ public class FormCrearCurso extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtFechaFinalActionPerformed
 
-    private void cmdCupoMaxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdCupoMaxActionPerformed
+    private void txtCupoMaxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCupoMaxActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_cmdCupoMaxActionPerformed
+    }//GEN-LAST:event_txtCupoMaxActionPerformed
 
     private void cmbLaboratorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbLaboratorioActionPerformed
 
-         
         // TODO add your handling code here:
     }//GEN-LAST:event_cmbLaboratorioActionPerformed
 
     private void cmdVerificarLaboratorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdVerificarLaboratorioActionPerformed
 
-         this.limpiarCmbLab();
-         String cad = this.myFormPrincipal.getMyFabLab().listarLaboratorios();
-         if(cad.isEmpty()){
-             Ventana.imp("No hay laboratorios", "Sistema");
-             return;
-         }
-         
-         String [] x= cad.split("/");
-         for(String numP: x){
-             this.cmbLaboratorio.addItem(numP);
-         }
+        this.limpiarCmbLab();
+        if (!this.leerTiempos()){
+            return;
+        }
+        String cad = this.myFormPrincipal.getMyFabLab().listarLaboratorios(horaInicio, horaFinal, fechaInicio, fechaFinal);
+        if (cad.isEmpty()) {
+            Ventana.imp("No hay laboratorios", "Sistema");
+            return;
+        }
+
+        String[] x = cad.split("/");
+        for (String numP : x) {
+            this.cmbLaboratorio.addItem(numP);
+        }
         // TODO add your handling code here:
     }//GEN-LAST:event_cmdVerificarLaboratorioActionPerformed
 
-    private void cmbVerificarInstructorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbVerificarInstructorActionPerformed
+    private void cmdVerificarInstructorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdVerificarInstructorActionPerformed
         // TODO add your handling code here:
         this.limpiarCmbInstructor();
-        
-        String fechaInicio = this.txtFechaInicio.getText();
-        String fechaFinal = this.txtFechaFinal.getText();
-        String horaInicio = this.txtHoraInicio.getText();
-        String horaFinal = this.txtHoraFinal.getText();
-        if(fechaInicio.isBlank()||fechaFinal.isBlank()||horaInicio.isBlank()||horaFinal.isBlank()){
-            Ventana.imp("Termine de ingresar fechas y horas", "Ventana");
+        if (!this.leerTiempos()) {
             return;
         }
-        int horaIni = Integer.parseInt(horaInicio);
-        int horaFin = Integer.parseInt(horaFinal);
-        
-        String cad = this.myFormPrincipal.getMyFabLab().listarInstructor(horaIni, horaFin, fechaInicio, fechaFinal);
-        if(cad.isEmpty()){
+        String cad = this.myFormPrincipal.getMyFabLab().listarInstructor(horaInicio, horaFinal, fechaInicio, fechaFinal);
+        if (cad.isEmpty()) {
             Ventana.imp("No hay Instructores", "Sistema");
         }
+
+        String[] x = cad.split("/");
+        for (String numP : x) {
+            this.cmbInstructor.addItem(numP);
+        }
+
+    }//GEN-LAST:event_cmdVerificarInstructorActionPerformed
+
+    private void cmdVerificarLaboratorio1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdVerificarLaboratorio1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmdVerificarLaboratorio1ActionPerformed
+
+    private void cmdVerificarPoblacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdVerificarPoblacionActionPerformed
+        // TODO add your handling code here:
+        this.limpiarCmbInstructor();
+        if (!this.leerTiempos()) {
+            return;
+        }
+        String cad = this.myFormPrincipal.getMyFabLab().listarTipoPoblaciones();
+        String[] x = cad.split("/");
+        for(String numP: x){
+            this.cmbPoblacionObj.addItem(numP);
+        }
         
-    }//GEN-LAST:event_cmbVerificarInstructorActionPerformed
+    }//GEN-LAST:event_cmdVerificarPoblacionActionPerformed
+
+    private void cmdTerminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdTerminarActionPerformed
+        // TODO add your handling code here:
+        if (!this.leerTiempos()) {
+            return;
+        }
+        String codigo = this.txtCodigo.getText();
+        String nombre = this.txtNombre.getText();
+        String laboratorio = this.cmbLaboratorio.getSelectedItem().toString();
+        String instructor = this.cmbInstructor.getSelectedItem().toString();
+        String poblacion = this.cmbPoblacionObj.getSelectedItem().toString();
+        String capacidadMax = this.txtCupoMax.getText();
+        String entidadSolicitante = this.txtEntidadSolicitante.getText();
+        
+        if(codigo.isEmpty()||nombre.isEmpty()||laboratorio.isEmpty()||instructor.isEmpty()||
+                poblacion.isEmpty()||capacidadMax.isEmpty()||entidadSolicitante.isEmpty()){
+            Ventana.imp("Faltan datos por registrar", "Sistema");
+            return;
+        }
+        
+        if(this.cmbLaboratorio.getSelectedIndex() == 0){
+            Ventana.imp("Debe tener un laboratorio escogido", "Sistema");
+            return;
+        }
+        if(this.cmbInstructor.getSelectedIndex() == 0){
+            Ventana.imp("Debe tener un instructor escogido", "Sistema");
+            return;
+        }
+        if(this.cmbPoblacionObj.getSelectedIndex() == 0){
+            Ventana.imp("Debe tener escogido la poblacion objetiva", "Sistema");
+            return;
+        }
+        
+        try{
+            int capMax = Integer.parseInt(capacidadMax);
+        } catch (NumberFormatException e){
+            Ventana.imp("No se puede poner texto en la capacidad Maxima", "Sistema");
+            return;
+        }
+        int capMax = Integer.parseInt(capacidadMax);
+        
+        String cad = this.myFormPrincipal.getMyFabLab().crearCurso(codigo, nombre, fechaInicio, fechaFinal, horaInicio, horaFinal, 
+                laboratorio, instructor, capMax, entidadSolicitante, poblacion);
+        
+        Ventana.imp(cad, "Sistema");
+        if(cad.startsWith("CURSO PROGRAMADO")){
+            this.dispose();
+        }
+        
+        
+    }//GEN-LAST:event_cmdTerminarActionPerformed
+
+    private void txtEntidadSolicitanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEntidadSolicitanteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtEntidadSolicitanteActionPerformed
 
     private void limpiarCmbLab() {
         this.cmbLaboratorio.removeAllItems();
-        this.cmbLaboratorio.addItem("<<NO SELECCIONADO>>");
+        this.cmbLaboratorio.addItem("<NO SELECCIONADO>");
     }
-    
-    private void limpiarCmbInstructor(){
+
+    private void limpiarCmbInstructor() {
 
     }
 
+    //Codigo para agarrar excepciones en como escriben las fechas
+    private LocalDate leerFecha(String texto, String nombreCampo) {
+        try {
+            return LocalDate.parse(texto.trim(), fmtFecha);
+        } catch (DateTimeParseException e) {
+            throw new IllegalArgumentException("La " + nombreCampo + " no es válida. Use el formato dd/MM/yyyy");
+        }
+    }
+
+    private LocalTime leerHora(String texto, String nombreCampo) {
+        try {
+            return LocalTime.parse(texto.trim(), fmtHora);
+        } catch (DateTimeParseException e) {
+            throw new IllegalArgumentException("La " + nombreCampo + " no es válida. Use el formato HH:mm (ej. 08:00)");
+        }
+    }
+
+    //
+    private boolean leerTiempos() {
+        try {
+            this.fechaInicio = leerFecha(this.txtFechaInicio.getText(), "fecha de inicio");
+            this.fechaFinal = leerFecha(this.txtFechaFinal.getText(), "fecha final");
+            this.horaInicio = leerHora(this.txtHoraInicio.getText(), "hora de inicio");
+            this.horaFinal = leerHora(this.txtHoraFinal.getText(), "hora final");
+        } catch (IllegalArgumentException e) {
+            Ventana.imp(e.getMessage(), "Sistema");
+            return false;
+        }
+        if (this.fechaInicio.equals(this.fechaFinal)) {
+            Ventana.imp("La fecha no puede ser la misma", "Sistema");
+            return false;
+        }
+
+        if (this.fechaFinal.isBefore(fechaInicio)) {
+            Ventana.imp("La fecha final no puede ir antes de la de inicio.", "Sistema");
+            return false;
+        }
+
+        if (this.horaInicio.equals(this.horaFinal)) {
+            Ventana.imp("La hora no puede ser la misma", "Sistema");
+            return false;
+        }
+
+        if (this.horaFinal.isBefore(this.horaInicio)) {
+            Ventana.imp("La hora final no puede ser antes de la hora inicial", "Sistema");
+            return false;
+        }
+        return true;
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> cmbInstructor;
     private javax.swing.JComboBox<String> cmbLaboratorio;
     private javax.swing.JComboBox<String> cmbPoblacionObj;
-    private javax.swing.JButton cmbVerificarInstructor;
-    private javax.swing.JTextField cmdCupoMax;
     private javax.swing.JButton cmdTerminar;
+    private javax.swing.JButton cmdVerificarInstructor;
     private javax.swing.JButton cmdVerificarLaboratorio;
+    private javax.swing.JButton cmdVerificarLaboratorio1;
+    private javax.swing.JButton cmdVerificarPoblacion;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
@@ -329,6 +498,8 @@ public class FormCrearCurso extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JTextField txtCodigo;
+    private javax.swing.JTextField txtCupoMax;
+    private javax.swing.JTextField txtEntidadSolicitante;
     private javax.swing.JTextField txtFechaFinal;
     private javax.swing.JTextField txtFechaInicio;
     private javax.swing.JTextField txtHoraFinal;

@@ -3,20 +3,23 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package NEGOCIO;
-
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 
 /**
  *
  * @author Asus
  */
-public class Curso {
+public class Curso implements Comparable<Curso>{
     private String nombre;
     private String areaTecnologia;
-    private String fechaInicio;
-    private String fechaFin;
-    private String horarioInicio;
-    private String horarioFinal;
+    private LocalDate fechaInicio;
+    private LocalDate fechaFin;
+    private LocalTime horarioInicio;
+    private LocalTime horarioFinal;
     private int cupo;
     private String estado;
     private String poblacionObjetivo;
@@ -26,8 +29,9 @@ public class Curso {
     private ArrayList<Participante> myParticipantes;
     private Laboratorio myLaboratorio;
 
-    public Curso(String nombre, String areaTecnologia, String fechaInicio, String fechaFin, String horarioInicio, String horarioFinal, int cupo, String estado,
-            String poblacionObjetivo, String entidadSolicitante, String codigo, Persona myInstructor, ArrayList<Participante> myParticipantes, Laboratorio myLaboratorio) {
+    public Curso(String nombre, String areaTecnologia, LocalDate fechaInicio, LocalDate fechaFin, LocalTime horarioInicio,
+            LocalTime horarioFinal, int cupo, String poblacionObjetivo, String entidadSolicitante,
+            String codigo, Persona myInstructor, Laboratorio myLaboratorio) {
         this.nombre = nombre;
         this.areaTecnologia = areaTecnologia;
         this.fechaInicio = fechaInicio;
@@ -35,15 +39,18 @@ public class Curso {
         this.horarioInicio = horarioInicio;
         this.horarioFinal = horarioFinal;
         this.cupo = cupo;
-        this.estado = estado;
+        this.estado = "Programado";
         this.poblacionObjetivo = poblacionObjetivo;
         this.entidadSolicitante = entidadSolicitante;
         this.codigo = codigo;
         this.myInstructor = myInstructor;
-        this.myParticipantes = myParticipantes;
+        this.myParticipantes = null;
         this.myLaboratorio = myLaboratorio;
     }
+
     
+    
+    @Override
     public int compareTo(Curso otro){
         return this.codigo.compareTo(((Curso)otro).getCodigo());
     }
@@ -87,37 +94,39 @@ public class Curso {
         this.areaTecnologia = areaTecnologia;
     }
 
-    public String getFechaInicio() {
+    public LocalDate getFechaInicio() {
         return fechaInicio;
     }
 
-    public void setFechaInicio(String fechaInicio) {
+    public void setFechaInicio(LocalDate fechaInicio) {
         this.fechaInicio = fechaInicio;
     }
 
-    public String getFechaFin() {
+    public LocalDate getFechaFin() {
         return fechaFin;
     }
 
-    public void setFechaFin(String fechaFin) {
+    public void setFechaFin(LocalDate fechaFin) {
         this.fechaFin = fechaFin;
     }
 
-    public String getHorarioInicio() {
+    public LocalTime getHorarioInicio() {
         return horarioInicio;
     }
 
-    public void setHorarioInicio(String horarioInicio) {
+    public void setHorarioInicio(LocalTime horarioInicio) {
         this.horarioInicio = horarioInicio;
     }
 
-    public String getHorarioFinal() {
+    public LocalTime getHorarioFinal() {
         return horarioFinal;
     }
 
-    public void setHorarioFinal(String horarioFinal) {
+    public void setHorarioFinal(LocalTime horarioFinal) {
         this.horarioFinal = horarioFinal;
     }
+
+    
 
     public int getCupo() {
         return cupo;

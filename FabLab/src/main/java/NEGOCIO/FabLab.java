@@ -5,9 +5,12 @@
 package NEGOCIO;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.TreeSet;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 
 /*
@@ -103,6 +106,7 @@ public class FabLab {
     private void iniciarRecursos() {
         this.recursosIniciales();
         this.crearLaboratorios();
+        this.crearInstructoresIniciales();
     }
 
     //RF1
@@ -138,17 +142,27 @@ public class FabLab {
         this.myInventario.add(new RecursoTecnologico("CD-05", "Tableta digitalizadora", "Equipo", 550000, 10));
     }
 
+    //METODO PARA INSTRUCTORES INICIALES
+    private void crearInstructoresIniciales() {
+        this.myPersonas.add(new Persona("1090111111", "Carlos Pérez", "carlos.perez@ufps.edu.co",
+                "3101111111", "UFPS", "Instructor", "FABLAB UFPS"));
+        this.myPersonas.add(new Persona("1090222222", "Laura Gómez", "laura.gomez@ufps.edu.co",
+                "3102222222", "UFPS", "Instructor", "FABLAB UFPS"));
+        this.myPersonas.add(new Persona("1090333333", "Andrés Ramírez", "andres.ramirez@ufps.edu.co",
+                "3103333333", "UFPS", "Instructor", "FABLAB UFPS"));
+    }
+
     public String programarCurso(String codigo, String nombre, String area, String fechaInicio, String fechaFin,
             String horaInicio, String horaFin, int cupo, String poblacion, String entidad, String idInstructor, String codLab) {
         if (this.buscarCurso(codigo) != null) {
             return "Ya existe un curso con ese codigo";
         }
-        
+
         String resultado = this.validarLaboratorio(codLab, area, cupo);
-        if(!resultado.equals("OK")){
+        if (!resultado.equals("OK")) {
             return resultado;
         }
-        
+
         if (this.buscarPersona(idInstructor) == null) {
             return "El instructor no existe";
         }
@@ -230,41 +244,112 @@ public class FabLab {
         }
         return cad;
     }
-    
-    public String listarLaboratorios(){
+
+    public String listarLaboratorios(LocalTime horaInicio, LocalTime horaFinal, LocalDate fechaInicio, LocalDate fechaFinal) {
         String cad = "";
-        for(Laboratorio l: this.myLaboratorio){
-            cad += l.getCodigo()+" "+l.getTipo()+"/";
+        for (Laboratorio l : this.myLaboratorio) {
+            if (disponibilidadLaboratorio(l, horaInicio, horaFinal, fechaInicio, fechaFinal) && l.getEstado().equals("DISPONIBLE")) {
+                cad += l.getCodigo() + " - " + l.getTipo() + "/";
+            }
         }
         return cad;
     }
-    
-    public String listarArea(){
-        String cad = "";
-        for(Laboratorio l: this.myLaboratorio){
-            cad += l.getTipo()+"/";
+
+    private boolean disponibilidadLaboratorio(Laboratorio myCLaboratorio, LocalTime horaInicio, LocalTime horaFinal,
+            LocalDate fechaInicio, LocalDate fechaFinal) {
+        if (myLaboratorio != null) {
+            for (Curso c : myCursos) {
+                if (c.getMyLaboratorio().getCodigo().equals(myCLaboratorio.getCodigo())) {
+                    if (horaInicio.isBefore(c.getHorarioFinal())
+                            && horaFinal.isAfter(c.getHorarioInicio())
+                            && !fechaInicio.isAfter(c.getFechaFin())
+                            && !fechaFinal.isBefore(c.getFechaInicio())) {
+
+                        return false;
+                    }
+                }
+            }
+        } else {
+            return true;
         }
-        return cad;
+        return true;
     }
-    
-    public String listarInstructor(int horaInicio, int horaFinal, String fechaInicio, String fechaFinal){
+
+    public String listarInstructor(LocalTime horaInicio, LocalTime horaFinal, LocalDate fechaInicio, LocalDate fechaFinal) {
         String cad = "";
-        for(Persona p: this.myPersonas){
-            if(p.getRol().equals("Instructor")){
-                if(disponibilidadInstructor(p, horaInicio, horaFinal)){
-                    cad+= p.getIdentificacion() +" "+p.getNombre();
+        for (Persona p : this.myPersonas) {
+            if (p.getRol().equals("Instructor")) {
+                if (disponibilidadInstructor(p, horaInicio, horaFinal, fechaInicio, fechaFinal)) {
+                    cad += p.getIdentificacion() + " - " + p.getNombre() + "/";
                 }
             }
         }
         return cad;
     }
-    
-    private boolean disponibilidadInstructor(Persona p, int horaInicio, int horaFinal){
-        if(myCursos!=null){
-            for(Curso c: this.myCursos){
-                
+
+    private boolean disponibilidadInstructor(Persona p, LocalTime horaInicio, LocalTime horaFinal, LocalDate fechaInicio,
+            LocalDate fechaFinal) {
+        if (myCursos != null) {
+            for (Curso c : this.myCursos) {
+                if (p.getIdentificacion().equals(c.getMyInstructor().getIdentificacion())) {
+                    //verificacion de si se cruzan
+                    if (horaInicio.isBefore(c.getHorarioFinal())
+                            && horaFinal.isAfter(c.getHorarioInicio())
+                            && !fechaInicio.isAfter(c.getFechaFin())
+                            && !fechaFinal.isBefore(c.getFechaInicio())) {
+
+                        return false;
+                    }
+                }
             }
+        } else {
+            return true;
+        }
+        return true;
+    }
+
+    public String listarTipoPoblaciones() {
+        String cad = "";
+        cad = "General / Vulnerable / Empresarial";
+        return cad;
+    }
+
+    public String crearCurso(String codigo, String nombre, LocalDate fechaInicio, LocalDate fechaFinal, LocalTime horaInicio,
+            LocalTime horaFinal, String laboratorio, String instructor, int capacidadMax, String entidadSolicitante, String poblacionObj) {
+        String cad = "";
+
+        String codigoLab = laboratorio.split(" - ")[0];
+        String areaCurso = laboratorio.split(" - ")[1];
+        Laboratorio myCLaboratorio = this.buscarLaboratorio(codigoLab);
+        String codigoInstructor = instructor.split(" - ")[0];
+        Persona myInstructor = this.buscarPersona(codigoInstructor);
+
+        if (!this.verificarCapacidadMaxima(capacidadMax, myCLaboratorio)) {
+            return "la capacidad maxima establecida es mayor a la del laboratorio";
+        }
+
+        this.myCursos.add(new Curso(nombre, areaCurso, fechaInicio, fechaFinal, horaInicio, horaFinal, capacidadMax,
+                poblacionObj, entidadSolicitante, codigo, myInstructor, myCLaboratorio));
+
+        cad = "CURSO PROGRAMADO" + "\n"
+                + "Codigo: " + codigo + "\n"
+                + "Nombre: " + nombre + "\n"
+                + "Laboratorio: " + myCLaboratorio.getCodigo() + " - " + myCLaboratorio.getTipo() + "\n"
+                + "Instructor: " + myInstructor.getIdentificacion() + " - " + myInstructor.getNombre() + "\n"
+                + "Fecha: " + fechaInicio.toString() + " - " + fechaFinal.toString() + "\n"
+                + "Horario: " + horaInicio.toString() + " - " + horaFinal.toString() + "\n"
+                + "Cupo maximo: " + capacidadMax + "\n"
+                + "Poblacion objetivo: " + poblacionObj + "\n"
+                + "Estado: PROGRAMADO";
+
+        return cad;
+    }
+
+    private boolean verificarCapacidadMaxima(int capacidadMax, Laboratorio myL) {
+        if (myL.getCapacidadMaxima() >= capacidadMax) {
+            return true;
         }
         return false;
     }
+
 }
